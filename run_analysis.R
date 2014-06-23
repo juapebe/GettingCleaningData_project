@@ -3,6 +3,18 @@
 ##This script is the product of the Course Project for the course "Getting and
 ##Cleaning Data" (Coursera. June 2014).
 
+#Load files
+readData<-function(){
+        actLabels<<-read.table("./UCI HAR Dataset/activity_labels.txt")
+        feature_names<<-read.table("./UCI HAR Dataset/features.txt")
+        test_subject<<-read.table("./UCI HAR Dataset/test/subject_test.txt")
+        train_subject<<-read.table("./UCI HAR Dataset/train/subject_train.txt")
+        test_X<<-read.table("./UCI HAR Dataset/test/X_test.txt")
+        test_Y<<-read.table("./UCI HAR Dataset/test/y_test.txt")
+        train_X<<-read.table("./UCI HAR Dataset/train/X_train.txt")
+        train_Y<<-read.table("./UCI HAR Dataset/train/y_train.txt")
+}
+
 #A function to remove all variables that are not mean or stdev
 extract_mean_stdev<-function(df){
         for (cn in colnames(df)){
@@ -46,18 +58,6 @@ rename_features<-function(fv){
                 fv2<-append(fv2, n)
         }
         return(fv2)
-}
-
-#Load files
-readData<-function(){
-        actLabels<<-read.table("./UCI HAR Dataset/activity_labels.txt")
-        feature_names<<-read.table("./UCI HAR Dataset/features.txt")
-        test_subject<<-read.table("./UCI HAR Dataset/test/subject_test.txt")
-        train_subject<<-read.table("./UCI HAR Dataset/train/subject_train.txt")
-        test_X<<-read.table("./UCI HAR Dataset/test/X_test.txt")
-        test_Y<<-read.table("./UCI HAR Dataset/test/y_test.txt")
-        train_X<<-read.table("./UCI HAR Dataset/train/X_train.txt")
-        train_Y<<-read.table("./UCI HAR Dataset/train/y_train.txt")
 }
 
 #Execution block (MAIN)
