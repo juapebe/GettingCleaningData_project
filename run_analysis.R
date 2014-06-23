@@ -62,6 +62,8 @@ readData<-function(){
 
 #Execution block (MAIN)
 MAIN<-function(){
+        library(plyr)
+        #Loads data
         readData()
         
         #Concatenate files. Obtain list of features, subjects, activities
