@@ -48,8 +48,8 @@ rename_features<-function(fv){
                 n<-replace_strings("BodyBody", n, "Body")
                 n<-replace_strings("tBodyAcc", n, "BodyAcc_t")
                 n<-replace_strings("tGravityAcc", n, "GravityAcc_t")
-                n<-replace_strings("fBodyAcc", n, "BodyAccel_f")
-                n<-replace_strings("fGravityAcc", n, "GravityAccel_f")
+                n<-replace_strings("fBodyAcc", n, "BodyAcc_f")
+                n<-replace_strings("fGravityAcc", n, "GravityAcc_f")
                 n<-replace_strings("Mag", n, "Mag")
                 n<-replace_strings("tBodyGyro", n, "BodyGyro_t")
                 n<-replace_strings("fBodyGyro", n, "BodyGyro_f")
@@ -67,7 +67,7 @@ rename_features<-function(fv){
 library(plyr)
 
 #Loads data
-readData()
+#readData()
 
 #Concatenate files. Obtain list of features, subjects, activities
 features<-data.frame(rbind(test_X, train_X))
