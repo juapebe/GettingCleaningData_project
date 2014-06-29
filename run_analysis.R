@@ -64,17 +64,17 @@ rename_features<-function(fv){
 #Execution block (MAIN)
 ####
 
-library(plyr)
+library(reshape2)
 
 #Loads data
-#readData()
+readData()
 
 #Concatenate files. Obtain list of features, subjects, activities
 features<-data.frame(rbind(test_X, train_X))
 subjects<-rbind(test_subject, train_subject)
 activities<-rbind(test_Y, train_Y)
 actLabels[2]<-tolower(sub("_", " ", actLabels[,2])) #nicer activity names
-activities<-merge(activities, actLabels, by.x="V1", by.y="V1", sort=FALSE)
+#ERROR IS HERE - remake trying to avoid using this so early (it sorts them badly) and also using melt -> dcast
 
 #Narrow down the number of features. Rename features to more readable
 colnames(features)<-feature_names[,2]
@@ -82,7 +82,7 @@ features<-extract_mean_stdev(features)
 colnames(features)<-rename_features(colnames(features))
 
 #Merge feature, subject, and activity information.
-firstData<-data.frame(Subject=subjects[,1], Activity=activities[,2], features)
+firstData<-data.frame(Subject=subjects[,1], Activity=activities[,1], features)
 firstData<-firstData[order(firstData$Subject),]
 
 #Prints the first, non-summary dataframe to file
@@ -90,18 +90,9 @@ write.table(firstData, file="original_DataFrame.txt", sep="\t", quote=FALSE,
             row.names=FALSE)
 
 #Generates the second, 'tidy' dataset.
-SubjectActivity<-paste(firstData$Subject, firstData$Activity, sep="-")
-spData<-split(firstData[-1:-2], SubjectActivity)
-tidyData<-data.frame()
-for(e in spData){
-        l<-sapply(e, mean)
-        tidyData<-rbind(tidyData, l)
-}
-names(tidyData)<-names(firstData[-1:-2])
-SA<-strsplit(unique(SubjectActivity), "-")
-SA<-ldply(SA)
-colnames(SA)<-c("Subject", "Activity")
-tidyData<-data.frame(Subject=SA[,1], Activity=SA[,2], tidyData)
+firstDataMelt<-melt(firstData, id.vars=c("Subject","Activity"))
+firstDataMelt<-merge(firstDataMelt, actLabels, by.x="Activity", by.y="V1")
+tidyData<- dcast(firstDataMelt, formula = Subject + Activity ~ variable, mean)
 
 #prints the tidy dataset
 write.table(tidyData, file="means_tidyDataFrame.txt", sep="\t", quote=FALSE,
